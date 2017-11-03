@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Remember English Example</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_search">Search</string>
+    <string name="title_card">Card</string>
+    <string name="title_learner">Learner</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_item_list">Items</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="search_hint">Enter word here</string>
+</resources>
