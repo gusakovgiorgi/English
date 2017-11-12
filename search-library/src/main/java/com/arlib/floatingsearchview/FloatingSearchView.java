@@ -77,7 +77,6 @@ import com.bartoszlipinski.viewpropertyobjectanimator.ViewPropertyObjectAnimator
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -681,9 +680,9 @@ public class FloatingSearchView extends FrameLayout {
                 } else {
                     switch (mLeftActionMode) {
                         case LEFT_ACTION_MODE_SHOW_HAMBURGER:
-                            if(mLeftMenuClickListener != null){
+                            if (mLeftMenuClickListener != null) {
                                 mLeftMenuClickListener.onClick(mLeftAction);
-                            }else {
+                            } else {
                                 toggleLeftMenu();
                             }
                             break;
@@ -780,7 +779,7 @@ public class FloatingSearchView extends FrameLayout {
      *
      * @return
      */
-    public List<MenuItemImpl> getCurrentMenuItems(){
+    public List<MenuItemImpl> getCurrentMenuItems() {
         return mMenuView.getCurrentMenuItems();
     }
 
@@ -1096,9 +1095,9 @@ public class FloatingSearchView extends FrameLayout {
     public void setShowSearchKey(boolean show) {
         mShowSearchKey = show;
         if (show) {
-            mSearchInput.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+            mSearchInput.setImeOptions(EditorInfo.IME_ACTION_SEARCH | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         } else {
-            mSearchInput.setImeOptions(EditorInfo.IME_ACTION_NONE);
+            mSearchInput.setImeOptions(EditorInfo.IME_ACTION_NONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         }
     }
 
@@ -1836,6 +1835,7 @@ public class FloatingSearchView extends FrameLayout {
         savedState.dimBackground = mDimBackground;
         savedState.dismissOnSoftKeyboardDismiss = mDismissOnOutsideTouch;
         savedState.dismissFocusOnSuggestionItemClick = mDismissFocusOnItemSelection;
+        savedState.closeSearchOnSofteKeyboardDismiss = mCloseSearchOnSofteKeyboardDismiss;
         return savedState;
     }
 
@@ -1869,6 +1869,7 @@ public class FloatingSearchView extends FrameLayout {
         setDimBackground(savedState.dimBackground);
         setCloseSearchOnKeyboardDismiss(savedState.dismissOnSoftKeyboardDismiss);
         setDismissFocusOnItemSelection(savedState.dismissFocusOnSuggestionItemClick);
+        setCloseSearchOnKeyboardDismiss(savedState.closeSearchOnSofteKeyboardDismiss);
 
         mSuggestionsSection.setEnabled(mIsFocused);
         if (mIsFocused) {
@@ -1926,6 +1927,7 @@ public class FloatingSearchView extends FrameLayout {
         private long suggestionsSectionAnimSuration;
         private boolean dismissOnSoftKeyboardDismiss;
         private boolean dismissFocusOnSuggestionItemClick;
+        private boolean closeSearchOnSofteKeyboardDismiss;
 
         SavedState(Parcelable superState) {
             super(superState);
@@ -1959,6 +1961,7 @@ public class FloatingSearchView extends FrameLayout {
             suggestionsSectionAnimSuration = in.readLong();
             dismissOnSoftKeyboardDismiss = (in.readInt() != 0);
             dismissFocusOnSuggestionItemClick = (in.readInt() != 0);
+            closeSearchOnSofteKeyboardDismiss = (in.readInt() != 0);
         }
 
         @Override
@@ -1990,6 +1993,7 @@ public class FloatingSearchView extends FrameLayout {
             out.writeLong(suggestionsSectionAnimSuration);
             out.writeInt(dismissOnSoftKeyboardDismiss ? 1 : 0);
             out.writeInt(dismissFocusOnSuggestionItemClick ? 1 : 0);
+            out.writeInt(closeSearchOnSofteKeyboardDismiss ? 1 : 0);
         }
 
         public static final Creator<SavedState> CREATOR

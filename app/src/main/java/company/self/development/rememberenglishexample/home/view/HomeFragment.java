@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import company.self.development.rememberenglishexample.R;
+import company.self.development.rememberenglishexample.base.SelectProperNavigationInterface;
 import company.self.development.rememberenglishexample.home.interfaces.HomeFragmentView;
 import company.self.development.rememberenglishexample.home.presenter.HomeFragmentPresenter;
 import company.self.development.rememberenglishexample.util.ChangeableBundleFragment;
@@ -26,7 +27,7 @@ public class HomeFragment extends MvpAppCompatFragment implements HomeFragmentVi
 
     private Bundle mArguments;
 
-    @BindView(R.id.fake_search_edit_text)
+    @BindView(R.id.search_bar_text)
     protected EditText mSearchEditText;
 
     private HomeFragmentListener mListener;
@@ -78,12 +79,20 @@ public class HomeFragment extends MvpAppCompatFragment implements HomeFragmentVi
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (mListener!=null){
+            mListener.selectNavigate(TAG);
+        }
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
-    @OnClick(R.id.fake_search_edit_text)
+    @OnClick(R.id.search_bar_text)
     void onSearchClick(View view){
         presenter.onSearchClick(view);
     }
@@ -95,7 +104,7 @@ public class HomeFragment extends MvpAppCompatFragment implements HomeFragmentVi
         }
     }
 
-    public interface HomeFragmentListener {
+    public interface HomeFragmentListener extends SelectProperNavigationInterface{
         void showSearchViewClick();
     }
 }

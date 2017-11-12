@@ -1,12 +1,16 @@
 package company.self.development.rememberenglishexample.main.presenter;
 
+import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 
 import company.self.development.rememberenglishexample.R;
+import company.self.development.rememberenglishexample.home.view.HomeFragment;
+import company.self.development.rememberenglishexample.main.classes.router.Router;
 import company.self.development.rememberenglishexample.main.interfaces.MainActivityInterface;
+import company.self.development.rememberenglishexample.search.view.SearchFragment;
 
 /**
  * Created by Giorgi on 10/24/2017.
@@ -22,8 +26,8 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityInterface> {
         getViewState().goToHome();
     }
 
-    public boolean handleNavigationItemClick(MenuItem menuItem){
-        if (!onlySelectNavigationView){
+    public boolean selectNavigationItem(MenuItem menuItem){
+        if (!onlySelectNavigationView || menuItem.isChecked()){
             return true;
         }
         switch (menuItem.getItemId()) {
@@ -52,5 +56,14 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityInterface> {
         onlySelectNavigationView =false;
         getViewState().changeNavigationViewProgrammatically(R.id.navigation_search);
         onlySelectNavigationView =true;
+    }
+
+    public void selectProperNavigationEventReceived(String tag) {
+        if (tag==null) return;
+        if (tag.equals(HomeFragment.TAG)){
+            getViewState().changeNavigationViewProgrammatically(R.id.navigation_home);
+        }else if (tag.equals(SearchFragment.TAG)){
+            getViewState().changeNavigationViewProgrammatically(R.id.navigation_search);
+        }
     }
 }

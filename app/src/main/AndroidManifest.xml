@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="company.self.development.rememberenglishexample">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".RememberEnglishApplication"
         android:allowBackup="true"
@@ -17,6 +19,7 @@
             tools:replace="android:value"/>
         <activity
             android:name=".main.view.MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

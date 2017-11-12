@@ -4,17 +4,10 @@
     android:layout_height="match_parent"
     tools:context="company.self.development.rememberenglishexample.home.view.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <include
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-    <EditText
-        android:focusable="false"
-        android:id="@+id/fake_search_edit_text"
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="type here to translate"/>
+        android:layout_marginTop="40dp"
+        layout="@layout/fake_search_view"/>
 
 </FrameLayout>

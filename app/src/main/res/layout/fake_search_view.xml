@@ -31,7 +31,7 @@
                 android:background="@drawable/oval_btn_selector"
                 android:clickable="true"
                 android:padding="@dimen/square_button_padding"
-                android:src="@drawable/ic_arrow_back_black_24dp"/>
+                android:src="@drawable/ic_search_black_24dp"/>
 
             <ProgressBar
                 android:id="@+id/search_bar_search_progress"
@@ -58,10 +58,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
                 android:alpha="1"
+                android:focusable="false"
                 android:background="@color/transparent"
                 android:ellipsize="end"
                 android:hint="@string/abc_search_hint"
-                android:imeOptions="actionSearch|flagNoExtractUi"
+                android:imeOptions="actionSearch"
                 android:inputType="textNoSuggestions"
                 android:maxLines="1"
                 android:longClickable="false"
