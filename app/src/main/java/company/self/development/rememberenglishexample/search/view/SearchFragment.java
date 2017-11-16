@@ -24,6 +24,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.PresenterType;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 
 import java.util.List;
 
@@ -31,10 +32,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import company.self.development.rememberenglishexample.R;
 import company.self.development.rememberenglishexample.base.SelectProperNavigationInterface;
+import company.self.development.rememberenglishexample.model.WordHistorySuggestion;
 import company.self.development.rememberenglishexample.model.WordSuggestion;
 import company.self.development.rememberenglishexample.search.interfaces.SearchFragmentView;
 import company.self.development.rememberenglishexample.search.presenter.SearchFragmentPresenter;
 import company.self.development.rememberenglishexample.util.ChangeableBundleFragment;
+import io.reactivex.Observable;
 
 public class SearchFragment extends MvpAppCompatFragment implements SearchFragmentView, ChangeableBundleFragment {
     public static final String TAG = SearchFragment.class.getSimpleName();
@@ -50,6 +53,19 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
     private FloatingSearchView.OnQueryChangeListener queryChangeListener = (oldQuery, newQuery) -> presenter.queryChange(oldQuery, newQuery);
 
     private SearchSuggestionsAdapter.OnBindSuggestionCallback onBindSuggestionCallback = (suggestionView, leftIcon, textView, item, itemPosition) -> presenter.onBindSuggestion(suggestionView, leftIcon, textView, item, itemPosition);
+
+    private FloatingSearchView.OnSearchListener searchListener= new FloatingSearchView.OnSearchListener() {
+        @Override
+        public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+            presenter.suggestionItemSelected((WordSuggestion) searchSuggestion);
+        }
+
+        @Override
+        public void onSearchAction(String currentQuery) {
+
+        }
+    };
+
     private Bundle mArguments;
 
     private SearchFragmentListener mListener;
@@ -105,7 +121,7 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
         if (mListener != null) {
             mListener.selectNavigate(TAG);
         }
-        presenter.searchFocused();
+        presenter.searchStarted(mArguments);
     }
 
     @Override
@@ -117,6 +133,11 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
     @Override
     public void showSuggestions(List<WordSuggestion> suggestions) {
         mSearchView.swapSuggestions(suggestions);
+    }
+
+    @Override
+    public void showSuggestionsHistory(List<WordHistorySuggestion> historySuggestions) {
+        mSearchView.swapSuggestions(historySuggestions);
     }
 
     @SuppressLint("WrongThread")
@@ -153,6 +174,17 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
     private void setupSearchView() {
         mSearchView.setOnQueryChangeListener(queryChangeListener);
         mSearchView.setOnBindSuggestionCallback(onBindSuggestionCallback);
+        mSearchView.setOnSearchListener(searchListener);
+    }
+
+    @Override
+    public void clearSuggestions() {
+        mSearchView.clearSuggestions();
+    }
+
+    @Override
+    public void setSearchText(String text) {
+        mSearchView.setSearchText(text);
     }
 
     public interface SearchFragmentListener extends SelectProperNavigationInterface {

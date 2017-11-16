@@ -1,5 +1,6 @@
 package company.self.development.rememberenglishexample.main.presenter;
 
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 
@@ -20,9 +21,10 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityInterface> {
 
     private boolean onlySelectNavigationView =true;
 
+
     @Override
-    protected void onFirstViewAttach() {
-        super.onFirstViewAttach();
+    public void attachView(MainActivityInterface view) {
+        super.attachView(view);
         getViewState().goToHome();
     }
 
@@ -36,7 +38,7 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityInterface> {
                 return true;
             case R.id.navigation_search:
                 getViewState().showMessage(R.string.title_search);
-                getViewState().goToSearch();
+                getViewState().goToSearch(null);
                 return true;
             case R.id.navigation_card:
                 getViewState().showMessage(R.string.title_card);
@@ -52,7 +54,9 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityInterface> {
     }
 
     public void showSearchEventReceived() {
-        getViewState().goToSearch();
+        Bundle args=new Bundle(1);
+        args.putBoolean(SearchFragment.PARAM1_FOCUS_SEARCH,true);
+        getViewState().goToSearch(args);
         onlySelectNavigationView =false;
         getViewState().changeNavigationViewProgrammatically(R.id.navigation_search);
         onlySelectNavigationView =true;

@@ -37,7 +37,6 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityIn
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         mNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Log.v("test", mNavigation.getMaxItemCount() + "");
     }
@@ -62,8 +61,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainActivityIn
     }
 
     @Override
-    public void goToSearch() {
-        getRouter().replaceFragment(R.id.frameLayout,SearchFragment.TAG,true,null);
+    public void goToSearch(Bundle args) {
+        getRouter().replaceFragment(R.id.frameLayout,SearchFragment.TAG,true,args);
     }
 
     @Override

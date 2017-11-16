@@ -5,6 +5,7 @@ import android.widget.ImageView;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.util.List;
@@ -16,12 +17,13 @@ import io.reactivex.Single;
 /**
  * Created by notbl on 11/12/2017.
  */
-
+@StateStrategyType(SingleStateStrategy.class)
 public interface SearchFragmentView extends MvpView{
-
-    @StateStrategyType(SingleStateStrategy.class)
     void showSuggestions(List<WordSuggestion> suggestions);
+    @StateStrategyType(SkipStrategy.class)
+    void showSuggestionsHistory(List<WordHistorySuggestion> historySuggestions);
     void setSuggestionsHistoryIcon(ImageView leftIcon);
-    @StateStrategyType(SingleStateStrategy.class)
     void showSearchProgress(boolean show);
+    void clearSuggestions();
+    void setSearchText(String text);
 }

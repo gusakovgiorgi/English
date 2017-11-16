@@ -1,6 +1,7 @@
 package company.self.development.rememberenglishexample.main.interfaces;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
@@ -15,6 +16,6 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 public interface MainActivityInterface extends MvpView {
     void showMessage(int strRes);
     void goToHome();
-    void goToSearch();
+    void goToSearch(Bundle args);
     void changeNavigationViewProgrammatically(int menuId);
 }

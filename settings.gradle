@@ -1,1 +1,1 @@
-include ':app', ':library-rxbinding', ':search-library'
+include ':app', ':search-library'

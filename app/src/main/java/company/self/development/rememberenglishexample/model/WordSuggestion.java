@@ -21,13 +21,24 @@ public class WordSuggestion implements SearchSuggestion, Comparable<WordSuggesti
     @SerializedName("score")
     private int priority;
 
+    private long selectedTime;
+
     public WordSuggestion(Parcel in) {
         word=in.readString();
         priority =in.readInt();
+        selectedTime=in.readLong();
     }
 
     public WordSuggestion(String word) {
         this.word = word;
+    }
+
+    public long getSelectedTime() {
+        return selectedTime;
+    }
+
+    public void setSelectedTime(long selectedTime) {
+        this.selectedTime = selectedTime;
     }
 
     @Override
@@ -44,6 +55,7 @@ public class WordSuggestion implements SearchSuggestion, Comparable<WordSuggesti
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(word);
         parcel.writeInt(priority);
+        parcel.writeLong(selectedTime);
     }
 
     @Override
