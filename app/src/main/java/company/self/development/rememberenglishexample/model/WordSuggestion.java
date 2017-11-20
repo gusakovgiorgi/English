@@ -75,4 +75,18 @@ public class WordSuggestion implements SearchSuggestion, Comparable<WordSuggesti
         }
     };
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WordSuggestion that = (WordSuggestion) o;
+
+        return word != null ? word.equals(that.word) : that.word == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return word != null ? word.hashCode() : 0;
+    }
 }

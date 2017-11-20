@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/English.iml" filepath="$PROJECT_DIR$/English.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library-rxbinding/library-rxbinding.iml" filepath="$PROJECT_DIR$/library-rxbinding/library-rxbinding.iml" />
       <module fileurl="file://$PROJECT_DIR$/search-library/search-library.iml" filepath="$PROJECT_DIR$/search-library/search-library.iml" />
     </modules>
   </component>

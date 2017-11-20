@@ -54,6 +54,7 @@ public class SearchFragmentPresenter extends MvpPresenter<SearchFragmentView> {
 
     public void searchStarted(Bundle args){
         if (args!=null && args.getBoolean(SearchFragment.PARAM1_FOCUS_SEARCH)){
+            getViewState().focusOnSearchView(true);
             showSuggestionsHistory();
         }
 
@@ -83,6 +84,7 @@ public class SearchFragmentPresenter extends MvpPresenter<SearchFragmentView> {
     }
 
     private void showSuggestionsHistory() {
+        showSuggestions=false;
         List<WordHistorySuggestion> wordHistorySuggestions=getSuggestionsHistory();
         getViewState().showSuggestionsHistory(wordHistorySuggestions);
     }
@@ -128,6 +130,9 @@ public class SearchFragmentPresenter extends MvpPresenter<SearchFragmentView> {
         selectedSuggestions=new TreeSet<>(new Comparator<WordSuggestion>() {
             @Override
             public int compare(WordSuggestion wordSuggestion, WordSuggestion t1) {
+                if (wordSuggestion.getBody().equals(t1.getBody())){
+                    return 0;
+                }
                 return -Long.compare(wordSuggestion.getSelectedTime(),t1.getSelectedTime());
             }
         });

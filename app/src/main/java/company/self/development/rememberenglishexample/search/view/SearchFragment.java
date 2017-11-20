@@ -1,22 +1,15 @@
 package company.self.development.rememberenglishexample.search.view;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.MainThread;
-import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.arellomobile.mvp.MvpAppCompatFragment;
@@ -37,7 +30,6 @@ import company.self.development.rememberenglishexample.model.WordSuggestion;
 import company.self.development.rememberenglishexample.search.interfaces.SearchFragmentView;
 import company.self.development.rememberenglishexample.search.presenter.SearchFragmentPresenter;
 import company.self.development.rememberenglishexample.util.ChangeableBundleFragment;
-import io.reactivex.Observable;
 
 public class SearchFragment extends MvpAppCompatFragment implements SearchFragmentView, ChangeableBundleFragment {
     public static final String TAG = SearchFragment.class.getSimpleName();
@@ -46,6 +38,8 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
 
     @BindView(R.id.floating_search_view)
     protected FloatingSearchView mSearchView;
+    @BindView(R.id.search_bar_text)
+    protected View mSearchViewField;
 
     @InjectPresenter(type = PresenterType.GLOBAL, tag = "SEARCH_FRAGMENT")
     SearchFragmentPresenter presenter;
@@ -88,9 +82,6 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mFocusSearch = getArguments().getBoolean(PARAM1_FOCUS_SEARCH);
-//        }
     }
 
     @Override
@@ -99,7 +90,6 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
-        mSearchView.findViewById(R.id.search_bar_text).requestFocus();
         setupSearchView();
         return view;
     }
@@ -165,6 +155,15 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
     }
 
     @Override
+    public void focusOnSearchView(boolean focus) {
+        if (focus){
+            mSearchViewField.requestFocus();
+        }else {
+            mSearchViewField.clearFocus();
+        }
+    }
+
+    @Override
     public void setSuggestionsHistoryIcon(ImageView leftIcon) {
         AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
         if (appCompatActivity == null) return;
@@ -175,6 +174,7 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
         mSearchView.setOnQueryChangeListener(queryChangeListener);
         mSearchView.setOnBindSuggestionCallback(onBindSuggestionCallback);
         mSearchView.setOnSearchListener(searchListener);
+        mSearchView.setShowMoveUpSuggestion(true);
     }
 
     @Override

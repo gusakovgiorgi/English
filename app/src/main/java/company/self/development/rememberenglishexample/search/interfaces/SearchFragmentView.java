@@ -26,4 +26,6 @@ public interface SearchFragmentView extends MvpView{
     void showSearchProgress(boolean show);
     void clearSuggestions();
     void setSearchText(String text);
+    @StateStrategyType(SkipStrategy.class)
+    void focusOnSearchView(boolean focus);
 }
