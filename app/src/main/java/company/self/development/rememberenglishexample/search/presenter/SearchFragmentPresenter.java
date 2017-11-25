@@ -24,6 +24,7 @@ import company.self.development.rememberenglishexample.model.WordHistorySuggesti
 import company.self.development.rememberenglishexample.model.WordSuggestion;
 import company.self.development.rememberenglishexample.search.interfaces.SearchFragmentView;
 import company.self.development.rememberenglishexample.search.rest.SuggestionsApi;
+import company.self.development.rememberenglishexample.search.rest.yandexApi.YandexApi;
 import company.self.development.rememberenglishexample.search.view.SearchFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -41,7 +42,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SearchFragmentPresenter extends MvpPresenter<SearchFragmentView> {
 
     private Retrofit suggestionsRestAdapter;
+    private Retrofit searchRestAdapter;
     private SuggestionsApi suggestionsApi;
+    private YandexApi searchApi;
     private Disposable suggestionsDisposable;
     private Set<WordSuggestion> selectedSuggestions;
     private boolean showSuggestions=true;
@@ -112,6 +115,13 @@ public class SearchFragmentPresenter extends MvpPresenter<SearchFragmentView> {
         return suggestionsApi;
     }
 
+    private YandexApi getSearchApi(){
+        if (searchApi==null){
+            searchApi=searchRestAdapter.create(YandexApi.class);
+        }
+        return searchApi;
+    }
+
     private void createRestAdapter() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -120,6 +130,13 @@ public class SearchFragmentPresenter extends MvpPresenter<SearchFragmentView> {
         httpClient.addInterceptor(logging);
         suggestionsRestAdapter = new Retrofit.Builder()
                 .baseUrl("https://api.datamuse.com") //Базовая часть адреса
+                .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(httpClient.build())
+                .build();
+
+        searchRestAdapter=new Retrofit.Builder()
+                .baseUrl("https://dictionary.yandex.net") //Базовая часть адреса
                 .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(httpClient.build())
