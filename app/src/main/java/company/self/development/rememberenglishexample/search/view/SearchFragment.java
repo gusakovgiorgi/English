@@ -56,7 +56,7 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
 
         @Override
         public void onSearchAction(String currentQuery) {
-
+            presenter.onSearchActionClick(currentQuery);
         }
     };
 

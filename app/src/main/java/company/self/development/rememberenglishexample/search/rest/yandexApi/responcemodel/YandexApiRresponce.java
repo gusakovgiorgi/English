@@ -1,5 +1,7 @@
 package company.self.development.rememberenglishexample.search.rest.yandexApi.responcemodel;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import company.self.development.rememberenglishexample.model.Translation;
 
 public class YandexApiRresponce implements ITranslation {
 
+    @SerializedName("def")
     private List<DefinitionModel> definitionModel;
 
 

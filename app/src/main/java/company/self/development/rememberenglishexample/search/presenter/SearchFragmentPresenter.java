@@ -2,6 +2,7 @@ package company.self.development.rememberenglishexample.search.presenter;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import com.arellomobile.mvp.MvpPresenter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -20,6 +22,8 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import company.self.development.rememberenglishexample.base.GlobalSettings;
+import company.self.development.rememberenglishexample.model.ITranslation;
+import company.self.development.rememberenglishexample.model.Translation;
 import company.self.development.rememberenglishexample.model.WordHistorySuggestion;
 import company.self.development.rememberenglishexample.model.WordSuggestion;
 import company.self.development.rememberenglishexample.search.interfaces.SearchFragmentView;
@@ -166,5 +170,21 @@ public class SearchFragmentPresenter extends MvpPresenter<SearchFragmentView> {
 
     }
 
+    public void onSearchActionClick(String currentQuery) {
+        getSearchApi().translate()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response->{
+                    ITranslation responceTranslation=(ITranslation)response;
+                    if (responceTranslation!=null && responceTranslation.getTranslations()!=null){
+                        for (Translation translation: responceTranslation.getTranslations()){
+                            Log.v("debug","original="+translation.getOriginalWord());
+                            Log.v("debug","transription= "+translation.getTranscription());
+                            Log.v("debug","translations = "+ Arrays.toString(translation.getTranslationWord().toArray()));
+                            Log.v("debug","examples = "+ Arrays.toString(translation.getExample().toArray()));
+                        }
+                    }
+                });
+    }
 }
 
