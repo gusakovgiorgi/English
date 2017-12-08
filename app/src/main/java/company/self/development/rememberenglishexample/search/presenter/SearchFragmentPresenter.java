@@ -1,5 +1,6 @@
 package company.self.development.rememberenglishexample.search.presenter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,18 +18,23 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import company.self.development.rememberenglishexample.base.GlobalSettings;
 import company.self.development.rememberenglishexample.model.ITranslation;
+import company.self.development.rememberenglishexample.model.Language;
+import company.self.development.rememberenglishexample.model.TranslateRequest;
 import company.self.development.rememberenglishexample.model.Translation;
 import company.self.development.rememberenglishexample.model.WordHistorySuggestion;
 import company.self.development.rememberenglishexample.model.WordSuggestion;
 import company.self.development.rememberenglishexample.search.interfaces.SearchFragmentView;
 import company.self.development.rememberenglishexample.search.rest.SuggestionsApi;
 import company.self.development.rememberenglishexample.search.rest.yandexApi.YandexApi;
+import company.self.development.rememberenglishexample.search.rest.yandexApi.YandexApiKey;
+import company.self.development.rememberenglishexample.search.rest.yandexApi.YandexApiRequest;
 import company.self.development.rememberenglishexample.search.view.SearchFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -170,8 +176,9 @@ public class SearchFragmentPresenter extends MvpPresenter<SearchFragmentView> {
 
     }
 
-    public void onSearchActionClick(String currentQuery) {
-        getSearchApi().translate()
+    public void onSearchActionClick(String currentQuery, Context context) {
+        TranslateRequest request=new YandexApiRequest(Language.getDefaultDirection(),new YandexApiKey(context),currentQuery);
+        getSearchApi().translate(request.getPostParams())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response->{

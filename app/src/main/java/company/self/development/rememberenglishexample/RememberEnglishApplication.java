@@ -15,4 +15,6 @@ public class RememberEnglishApplication extends Application {
         super.onCreate();
         ToastUtil.getInstance().init(this);
     }
+
+
 }
