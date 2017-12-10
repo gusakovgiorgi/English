@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:id="@+id/text_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/color_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:fontFamily="@font/monster_of_south"
+            android:textSize="@dimen/fon_size_normal"
+            tools:text="color name" />
+        <View
+            android:id="@+id/translate_card_divider_above_example"
+            android:layout_width="match_parent"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/colorPrimary"
+            android:layout_height="2dp"/>
+
+        <TextView
+            android:id="@+id/example"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/fon_size_normal"
+            android:fontFamily="@font/monster_of_south_italic"
+            tools:text="#000000" />
+    </LinearLayout>
+    <ImageView
+        android:layout_gravity="bottom|right"
+        android:padding="@dimen/minimum_dimen"
+        android:layout_width="@dimen/add_card_button_size"
+        android:layout_height="@dimen/add_card_button_size"
+        app:srcCompat="@drawable/ic_add_card_circle_app_48px"/>
+</android.support.v7.widget.CardView>

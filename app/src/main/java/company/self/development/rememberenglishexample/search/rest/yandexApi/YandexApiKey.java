@@ -1,6 +1,7 @@
 package company.self.development.rememberenglishexample.search.rest.yandexApi;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.GsonBuilder;
 
@@ -20,7 +21,9 @@ public class YandexApiKey {
     }
 
     public void checkApiKey(String yandexApiKey){
+        Log.v("debug","checkApiKey "+yandexApiKey);
         if (this.yandexApiKey.isEmpty() || !this.yandexApiKey.equals(yandexApiKey)){
+            Log.v("debug","saving key"+yandexApiKey);
             this.yandexApiKey=yandexApiKey;
             saveYandexApiKey();
         }
@@ -35,7 +38,7 @@ public class YandexApiKey {
 
     private void init(Context context) {
         applicatonContext=context.getApplicationContext();
-        String apiKey=applicatonContext.getSharedPreferences(YANDEX_API_SHARED_PREF_NAME,Context.MODE_PRIVATE)
+        yandexApiKey=applicatonContext.getSharedPreferences(YANDEX_API_SHARED_PREF_NAME,Context.MODE_PRIVATE)
                 .getString(YANDEX_API_KEY,"");
     }
 

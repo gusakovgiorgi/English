@@ -10,6 +10,8 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
 import java.util.List;
 
+import company.self.development.rememberenglishexample.model.ITranslation;
+import company.self.development.rememberenglishexample.model.Translation;
 import company.self.development.rememberenglishexample.model.WordHistorySuggestion;
 import company.self.development.rememberenglishexample.model.WordSuggestion;
 import io.reactivex.Single;
@@ -17,7 +19,7 @@ import io.reactivex.Single;
 /**
  * Created by notbl on 11/12/2017.
  */
-@StateStrategyType(SingleStateStrategy.class)
+@StateStrategyType(SkipStrategy.class)
 public interface SearchFragmentView extends MvpView{
     void showSuggestions(List<WordSuggestion> suggestions);
     @StateStrategyType(SkipStrategy.class)
@@ -28,4 +30,5 @@ public interface SearchFragmentView extends MvpView{
     void setSearchText(String text);
     @StateStrategyType(SkipStrategy.class)
     void focusOnSearchView(boolean focus);
+    void showTranslations(List<Translation> translations);
 }

@@ -30,11 +30,11 @@ public class TranslationModel {
     public List<String> getTranslationsList(){
         List<String> translationsList=new ArrayList<>();
         if (translatedText!=null) translationsList.add(translatedText);
-        if (synonyms!=null && synonyms.size()>0){
-            for (SynonymModel synonym:synonyms){
-                translationsList.add(synonym.translatedSynonymText);
-            }
-        }
+//        if (synonyms!=null && synonyms.size()>0){
+//            for (SynonymModel synonym:synonyms){
+//                translationsList.add(synonym.translatedSynonymText);
+//            }
+//        }
         return translationsList;
     }
 

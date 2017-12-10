@@ -9,6 +9,6 @@ public enum Language {
     RU;
 
     public static String getDefaultDirection(){
-        return EN.name()+"-"+RU.name();
+        return EN.name().toLowerCase()+"-"+RU.name().toLowerCase();
     }
 }

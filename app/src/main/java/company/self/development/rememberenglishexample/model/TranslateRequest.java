@@ -9,7 +9,7 @@ import java.util.Map;
 public abstract class TranslateRequest {
     protected String text;
 
-    public abstract Map<String,String> getPostParams();`
+    public abstract Map<String,String> getPostParams();
 
     public TranslateRequest(String text) {
         this.text = text;

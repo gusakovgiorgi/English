@@ -7,6 +7,8 @@ import android.os.Looper;
 import android.support.annotation.MainThread;
 import android.support.annotation.WorkerThread;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.PresenterType;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
@@ -25,6 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import company.self.development.rememberenglishexample.R;
 import company.self.development.rememberenglishexample.base.SelectProperNavigationInterface;
+import company.self.development.rememberenglishexample.model.Translation;
 import company.self.development.rememberenglishexample.model.WordHistorySuggestion;
 import company.self.development.rememberenglishexample.model.WordSuggestion;
 import company.self.development.rememberenglishexample.search.interfaces.SearchFragmentView;
@@ -40,9 +44,17 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
     protected FloatingSearchView mSearchView;
     @BindView(R.id.search_bar_text)
     protected View mSearchViewField;
+    @BindView(R.id .search_results_list)
+    protected RecyclerView mSearchResultsList;
+    private SearchResultsListAdapter adapter;
 
     @InjectPresenter(type = PresenterType.GLOBAL, tag = "SEARCH_FRAGMENT")
     SearchFragmentPresenter presenter;
+
+    @ProvidePresenter(type = PresenterType.GLOBAL, tag = "SEARCH_FRAGMENT")
+    SearchFragmentPresenter providePresenterWithContext(){
+        return new SearchFragmentPresenter(getContext());
+    }
 
     private FloatingSearchView.OnQueryChangeListener queryChangeListener = (oldQuery, newQuery) -> presenter.queryChange(oldQuery, newQuery);
 
@@ -51,12 +63,12 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
     private FloatingSearchView.OnSearchListener searchListener= new FloatingSearchView.OnSearchListener() {
         @Override
         public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
-            presenter.suggestionItemSelected((WordSuggestion) searchSuggestion);
+            presenter.onSuggestionItemSelected((WordSuggestion) searchSuggestion);
         }
 
         @Override
         public void onSearchAction(String currentQuery) {
-            presenter.onSearchActionClick(currentQuery,getContext());
+            presenter.onSearchActionClick(currentQuery);
         }
     };
 
@@ -175,6 +187,9 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
         mSearchView.setOnBindSuggestionCallback(onBindSuggestionCallback);
         mSearchView.setOnSearchListener(searchListener);
         mSearchView.setShowMoveUpSuggestion(true);
+        adapter=new SearchResultsListAdapter();
+        mSearchResultsList.setAdapter(adapter);
+        mSearchResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     @Override
@@ -185,6 +200,13 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
     @Override
     public void setSearchText(String text) {
         mSearchView.setSearchText(text);
+    }
+
+    @Override
+    public void showTranslations(List<Translation> translations) {
+        adapter.swapData(translations);
+
+
     }
 
     public interface SearchFragmentListener extends SelectProperNavigationInterface {

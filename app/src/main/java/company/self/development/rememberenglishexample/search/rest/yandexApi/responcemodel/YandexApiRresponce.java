@@ -23,16 +23,18 @@ public class YandexApiRresponce implements ITranslation {
         List<Translation> translationList = new ArrayList<>();
         if (definitionModel == null) return translationList;
         for (DefinitionModel particularDefModel : definitionModel) {
-            Translation translation = new Translation();
-            translation.setOriginalWord(particularDefModel.originalText);
-            translation.setTranscription(particularDefModel.transcription);
+            String originalWord=particularDefModel.originalText;
+            String transcription=particularDefModel.transcription;
             if (particularDefModel.translations != null && particularDefModel.translations.size() > 0) {
                 for (TranslationModel translationModel : particularDefModel.translations) {
+                    Translation translation = new Translation();
+                    translation.setOriginalWord(originalWord);
+                    translation.setTranscription(transcription);
                     translation.addTranslationWord(translationModel.getTranslationsList());
                     translation.addExamples(translationModel.getExamples());
+                    translationList.add(translation);
                 }
             }
-            translationList.add(translation);
         }
         return translationList;
     }

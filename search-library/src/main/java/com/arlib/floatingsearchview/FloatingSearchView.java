@@ -479,7 +479,7 @@ public class FloatingSearchView extends FrameLayout {
                     R.styleable.FloatingSearchView_floatingSearch_searchBarMarginRight,
                     ATTRS_SEARCH_BAR_MARGIN_DEFAULT);
             LayoutParams querySectionLP = (LayoutParams) mQuerySection.getLayoutParams();
-            LayoutParams dividerLP = (LayoutParams) mDivider.getLayoutParams();
+            LinearLayout.LayoutParams dividerLP = (LinearLayout.LayoutParams) mDivider.getLayoutParams();
             LinearLayout.LayoutParams suggestListSectionLP =
                     (LinearLayout.LayoutParams) mSuggestionsSection.getLayoutParams();
             int cardPadding = Util.dpToPx(CARD_VIEW_TOP_BOTTOM_SHADOW_HEIGHT);
