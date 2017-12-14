@@ -27,6 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import company.self.development.rememberenglishexample.R;
+import company.self.development.rememberenglishexample.add_to_card.AddToCardDialogFragment;
 import company.self.development.rememberenglishexample.base.SelectProperNavigationInterface;
 import company.self.development.rememberenglishexample.model.Translation;
 import company.self.development.rememberenglishexample.model.WordHistorySuggestion;
@@ -34,6 +35,7 @@ import company.self.development.rememberenglishexample.model.WordSuggestion;
 import company.self.development.rememberenglishexample.search.interfaces.SearchFragmentView;
 import company.self.development.rememberenglishexample.search.presenter.SearchFragmentPresenter;
 import company.self.development.rememberenglishexample.util.ChangeableBundleFragment;
+import company.self.development.rememberenglishexample.util.ToastUtil;
 
 public class SearchFragment extends MvpAppCompatFragment implements SearchFragmentView, ChangeableBundleFragment {
     public static final String TAG = SearchFragment.class.getSimpleName();
@@ -188,6 +190,7 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
         mSearchView.setOnSearchListener(searchListener);
         mSearchView.setShowMoveUpSuggestion(true);
         adapter=new SearchResultsListAdapter();
+        adapter.setOnAddCardListener(onAddToCardListener);
         mSearchResultsList.setAdapter(adapter);
         mSearchResultsList.setLayoutManager(new LinearLayoutManager(getContext()));
     }
@@ -205,9 +208,21 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
     @Override
     public void showTranslations(List<Translation> translations) {
         adapter.swapData(translations);
-
-
     }
+
+    private AddToCardDialogFragment.OnSaveListener onSaveListener=result -> {ToastUtil.getInstance().showShortMessage("saved");};
+    private AddToCardDialogFragment.OnDiscardListener onDiscardListener=() -> {ToastUtil.getInstance().showShortMessage("discarted");};
+
+    // TODO: 12/14/2017 carry out resources
+    private SearchResultsListAdapter.OnAddToCardListener onAddToCardListener=translationModel -> {
+        new AddToCardDialogFragment.Builder(getContext())
+                .setConfirmButton(R.string.add)
+                .setTitle("Дабавить карточку")
+                .setOnSaveListener(onSaveListener)
+                .setOnDiscardListener(onDiscardListener)
+                .build().show(getChildFragmentManager(),"tag");
+     };
+
 
     public interface SearchFragmentListener extends SelectProperNavigationInterface {
         // TODO: Update argument type and name

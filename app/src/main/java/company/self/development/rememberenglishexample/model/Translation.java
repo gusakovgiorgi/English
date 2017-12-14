@@ -56,4 +56,14 @@ public class Translation {
         }
         this.example.addAll(addedExamples);
     }
+
+    @Override
+    public String toString() {
+        return "Translation{" +
+                "originalWord='" + originalWord + '\'' +
+                ", translationWord=" + translationWord +
+                ", transcription='" + transcription + '\'' +
+                ", example=" + example +
+                '}';
+    }
 }

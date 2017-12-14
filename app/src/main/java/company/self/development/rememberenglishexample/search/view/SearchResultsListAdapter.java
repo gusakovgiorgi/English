@@ -1,14 +1,14 @@
 package company.self.development.rememberenglishexample.search.view;
 
 import android.content.Context;
-import android.graphics.Point;
+import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -27,10 +27,16 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     private DisplayMetrics mDisplayMetrics;
     private WindowManager mWindowManager;
     private List<Translation> mDataSet;
+    private OnAddToCardListener mListener;
 
     public SearchResultsListAdapter() {
         mDataSet = new ArrayList<>();
     }
+
+    public void setOnAddCardListener(OnAddToCardListener listener) {
+        mListener = listener;
+    }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -41,12 +47,14 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.mTextContainer.setTag(mDataSet.get(position));
+        holder.mTextContainer.setOnClickListener(containerClickListener);
         holder.mTranslation.setText(getStringFromTranslationWords(mDataSet.get(position).getTranslationWord()));
-        String examplesString=getStringFromExamples(mDataSet.get(position).getExample());
+        String examplesString = getStringFromExamples(mDataSet.get(position).getExample());
         if (examplesString.isEmpty()) {
             holder.mDivider.setVisibility(View.INVISIBLE);
             holder.mExample.setText("");
-        }else {
+        } else {
             setDividerWidth(holder);
             holder.mDivider.setVisibility(View.VISIBLE);
             holder.mExample.setText(examplesString);
@@ -54,9 +62,10 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     }
 
     private void setDividerWidth(ViewHolder holder) {
-        // TODO: 12/10/2017 if we refresh search view measure increase
-        measureView(holder.mTextContainer,holder.mTextContainer.getContext());
-        holder.mDivider.getLayoutParams().width=holder.mTextContainer.getMeasuredWidth();
+        holder.mTranslation.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        ViewGroup.LayoutParams params = holder.mDivider.getLayoutParams();
+        params.width = holder.mTranslation.getMeasuredWidth();
+        holder.mDivider.setLayoutParams(params);
     }
 
     @Override
@@ -69,19 +78,20 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mTranslation;
-        public final TextView mExample;
-        public final View mTextContainer;
-        public final View mDivider;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        final TextView mTranslation;
+        final TextView mExample;
+        final View mTextContainer;
+        final View mDivider;
 
         public ViewHolder(View view) {
             super(view);
             mTranslation = (TextView) view.findViewById(R.id.color_name);
             mExample = (TextView) view.findViewById(R.id.example);
             mTextContainer = view.findViewById(R.id.text_container);
-            mDivider=view.findViewById(R.id.translate_card_divider_above_example);
+            mDivider = view.findViewById(R.id.translate_card_divider_above_example);
         }
+
     }
 
 
@@ -90,8 +100,7 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
         for (String translationString : translationStrings) {
             result.append(translationString).append(",").append(" ");
         }
-        deleteLastCharacters(2,result);
-
+        deleteLastCharacters(2, result);
         return result.toString();
     }
 
@@ -100,35 +109,29 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
         for (String example : examples) {
             result.append(example).append(".").append("\n");
         }
-        deleteLastCharacters(1,result);
+        deleteLastCharacters(1, result);
         return result.toString();
     }
 
 
-    private static void deleteLastCharacters(int length,StringBuilder result) {
-        if (result!=null && result.length()>2){
-            result.delete(result.length()-length,result.length());
+    private static void deleteLastCharacters(int length, StringBuilder result) {
+        if (result != null && result.length() > 2) {
+            result.delete(result.length() - length, result.length());
         }
     }
 
-    private void measureView(View view, Context context){
-        DisplayMetrics displayMetrics=getDisplayMetrics(context);
-        view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+    private View.OnClickListener containerClickListener = v -> {
+        dispatchEvent((Translation) v.getTag());
+    };
+
+    private void dispatchEvent(Translation translationModel) {
+        if (mListener != null) {
+            mListener.addToCard(translationModel);
+        }
     }
 
-    private DisplayMetrics getDisplayMetrics(Context context){
-        if (mDisplayMetrics==null){
-            mDisplayMetrics=new DisplayMetrics();
-            getWindowManager(context).getDefaultDisplay().getMetrics(mDisplayMetrics);
-        }
-        return mDisplayMetrics;
-    }
-
-    private WindowManager getWindowManager(Context context){
-        if (mWindowManager==null){
-            mWindowManager= (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        }
-        return mWindowManager;
+    interface OnAddToCardListener {
+        void addToCard(Translation translationModel);
     }
 
 }
