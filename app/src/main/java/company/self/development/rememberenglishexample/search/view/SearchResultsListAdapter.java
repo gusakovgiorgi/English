@@ -17,6 +17,7 @@ import java.util.List;
 
 import company.self.development.rememberenglishexample.R;
 import company.self.development.rememberenglishexample.model.Translation;
+import company.self.development.rememberenglishexample.search.utils.SearchUtils;
 
 /**
  * Created by notbl on 12/9/2017.
@@ -49,8 +50,8 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.mTextContainer.setTag(mDataSet.get(position));
         holder.mTextContainer.setOnClickListener(containerClickListener);
-        holder.mTranslation.setText(getStringFromTranslationWords(mDataSet.get(position).getTranslationWord()));
-        String examplesString = getStringFromExamples(mDataSet.get(position).getExample());
+        holder.mTranslation.setText(SearchUtils.getStringFromTranslationWords(mDataSet.get(position).getTranslationWord()));
+        String examplesString = SearchUtils.getStringFromExamples(mDataSet.get(position).getExample());
         if (examplesString.isEmpty()) {
             holder.mDivider.setVisibility(View.INVISIBLE);
             holder.mExample.setText("");
@@ -94,31 +95,6 @@ public class SearchResultsListAdapter extends RecyclerView.Adapter<SearchResults
 
     }
 
-
-    private static String getStringFromTranslationWords(List<String> translationStrings) {
-        StringBuilder result = new StringBuilder();
-        for (String translationString : translationStrings) {
-            result.append(translationString).append(",").append(" ");
-        }
-        deleteLastCharacters(2, result);
-        return result.toString();
-    }
-
-    private static String getStringFromExamples(List<String> examples) {
-        StringBuilder result = new StringBuilder();
-        for (String example : examples) {
-            result.append(example).append(".").append("\n");
-        }
-        deleteLastCharacters(1, result);
-        return result.toString();
-    }
-
-
-    private static void deleteLastCharacters(int length, StringBuilder result) {
-        if (result != null && result.length() > 2) {
-            result.delete(result.length() - length, result.length());
-        }
-    }
 
     private View.OnClickListener containerClickListener = v -> {
         dispatchEvent((Translation) v.getTag());

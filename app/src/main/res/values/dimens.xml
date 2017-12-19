@@ -7,6 +7,9 @@
     <dimen name="item_width">200dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="minimum_dimen">8dp</dimen>
+    <dimen name="small_dimen">16dp</dimen>
+    <dimen name="medium_dimen">24dp</dimen>
+    <dimen name="big_dimen">32dp</dimen>
     <dimen name="add_card_button_size">48dp</dimen>
 
     <dimen name="fon_size_normal">18sp</dimen>

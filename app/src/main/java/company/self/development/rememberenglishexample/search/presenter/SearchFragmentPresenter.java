@@ -59,10 +59,12 @@ public class SearchFragmentPresenter extends MvpPresenter<SearchFragmentView> {
     private Set<WordSuggestion> selectedSuggestions;
     private boolean showSuggestions = true;
     private Context applicationContext;
+    private String currentSearchText;
 
 
     public SearchFragmentPresenter(Context context) {
         this.applicationContext = context.getApplicationContext();
+        currentSearchText="";
         createRestAdapter();
         initFields();
     }
@@ -191,6 +193,7 @@ public class SearchFragmentPresenter extends MvpPresenter<SearchFragmentView> {
     }
 
     private void translate(String currentQuery) {
+        currentSearchText=currentQuery;
         YandexApiKey yandexApiKey = new YandexApiKey(applicationContext);
         TranslateRequest request = new YandexApiRequest(Language.getDefaultDirection(), yandexApiKey, currentQuery);
         getSearchApi().translate(request.getPostParams())
@@ -217,6 +220,10 @@ public class SearchFragmentPresenter extends MvpPresenter<SearchFragmentView> {
                     throwable.printStackTrace();
 
                 });
+    }
+
+    public void createOwnCardClicked(View mCreateOwnCardView) {
+        getViewState().showEmptyDialog(currentSearchText);
     }
 }
 

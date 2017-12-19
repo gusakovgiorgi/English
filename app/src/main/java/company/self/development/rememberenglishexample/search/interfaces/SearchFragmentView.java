@@ -31,4 +31,5 @@ public interface SearchFragmentView extends MvpView{
     @StateStrategyType(SkipStrategy.class)
     void focusOnSearchView(boolean focus);
     void showTranslations(List<Translation> translations);
+    void showEmptyDialog(String originalWord);
 }

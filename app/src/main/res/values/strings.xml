@@ -9,9 +9,13 @@
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="search_hint">Enter word here</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="show_fragment_error_string">error duting attempt to show window</string>
+    <string name="show_fragment_error_string">error during attempt to show window</string>
     <string name="something_went_wrong">Oops, something went wrong!</string>
+
+    <!--add dialog strigns-->
+    <string name="add_dialog_title">Добавление перевода</string>
+    <string name="original_word_field">Enter original word *</string>
+    <string name="transcription_word_field">Enter transcription</string>
+    <string name="translation_word_field">Enter translation *</string>
+    <string name="example_word_field">Enter example</string>
 </resources>

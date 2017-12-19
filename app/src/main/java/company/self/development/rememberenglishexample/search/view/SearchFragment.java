@@ -26,6 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import company.self.development.rememberenglishexample.R;
 import company.self.development.rememberenglishexample.add_to_card.AddToCardDialogFragment;
 import company.self.development.rememberenglishexample.base.SelectProperNavigationInterface;
@@ -34,6 +35,7 @@ import company.self.development.rememberenglishexample.model.WordHistorySuggesti
 import company.self.development.rememberenglishexample.model.WordSuggestion;
 import company.self.development.rememberenglishexample.search.interfaces.SearchFragmentView;
 import company.self.development.rememberenglishexample.search.presenter.SearchFragmentPresenter;
+import company.self.development.rememberenglishexample.search.utils.SearchUtils;
 import company.self.development.rememberenglishexample.util.ChangeableBundleFragment;
 import company.self.development.rememberenglishexample.util.ToastUtil;
 
@@ -41,6 +43,7 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
     public static final String TAG = SearchFragment.class.getSimpleName();
 
     public static final String PARAM1_FOCUS_SEARCH = "param1_focus_search";
+    private static final String ADD_DIALOG_TAG="ADD_DIALOG_TAG";
 
     @BindView(R.id.floating_search_view)
     protected FloatingSearchView mSearchView;
@@ -48,6 +51,8 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
     protected View mSearchViewField;
     @BindView(R.id .search_results_list)
     protected RecyclerView mSearchResultsList;
+    @BindView(R.id.create_own_card)
+    protected View mCreateOwnCardView;
     private SearchResultsListAdapter adapter;
 
     @InjectPresenter(type = PresenterType.GLOBAL, tag = "SEARCH_FRAGMENT")
@@ -210,18 +215,38 @@ public class SearchFragment extends MvpAppCompatFragment implements SearchFragme
         adapter.swapData(translations);
     }
 
-    private AddToCardDialogFragment.OnSaveListener onSaveListener=result -> {ToastUtil.getInstance().showShortMessage("saved");};
+    @Override
+    public void showEmptyDialog(String currentSearchText) {
+        new AddToCardDialogFragment.Builder(getContext())
+                .setConfirmButton(R.string.add)
+                .setTitle(getString(R.string.add_dialog_title))
+                .setOnSaveListener(onSaveListener)
+                .setOnDiscardListener(onDiscardListener)
+                .setOriginalWord(currentSearchText)
+                .build().show(getChildFragmentManager(),ADD_DIALOG_TAG);
+    }
+
+    private AddToCardDialogFragment.OnSaveListener onSaveListener= result -> {ToastUtil.getInstance().showShortMessage("saved");};
     private AddToCardDialogFragment.OnDiscardListener onDiscardListener=() -> {ToastUtil.getInstance().showShortMessage("discarted");};
 
-    // TODO: 12/14/2017 carry out resources
+
     private SearchResultsListAdapter.OnAddToCardListener onAddToCardListener=translationModel -> {
         new AddToCardDialogFragment.Builder(getContext())
                 .setConfirmButton(R.string.add)
-                .setTitle("Дабавить карточку")
+                .setTitle(getString(R.string.add_dialog_title))
                 .setOnSaveListener(onSaveListener)
                 .setOnDiscardListener(onDiscardListener)
-                .build().show(getChildFragmentManager(),"tag");
+                .setOriginalWord(translationModel.getOriginalWord())
+                .setTranscription(translationModel.getTranscription())
+                .setTranslation(SearchUtils.getStringFromTranslationWords(translationModel.getTranslationWord()))
+                .setExample(SearchUtils.getStringFromExamples(translationModel.getExample()))
+                .build().show(getChildFragmentManager(),ADD_DIALOG_TAG);
      };
+
+    @OnClick(R.id.create_own_card)
+    protected  void createOwnCardClickEvent(){
+        presenter.createOwnCardClicked(mCreateOwnCardView);
+    }
 
 
     public interface SearchFragmentListener extends SelectProperNavigationInterface {

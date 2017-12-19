@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:clickable="true"
     android:descendantFocusability="afterDescendants">
 
@@ -14,11 +14,73 @@
         android:elevation="4dp"
         tools:targetApi="lollipop" />
 
-    <FrameLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/small_dimen"
+        android:fillViewport="true"
+        android:layout_below="@id/toolbar">
+
+    <LinearLayout
+        android:orientation="vertical"
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:inflatedId="@+id/content" />
+        >
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/original_word_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+        <EditText
+            android:id="@+id/original_word_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text|textAutoComplete"
+            android:hint="@string/original_word_field" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/transcription_word_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+            <EditText
+                android:id="@+id/transcription_word_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text|textAutoComplete"
+                android:hint="@string/transcription_word_field" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/translation_word_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+            <EditText
+                android:id="@+id/translation_word_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="4"
+                android:inputType="text|textAutoComplete|textMultiLine"
+                android:hint="@string/translation_word_field" />
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/example_word_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+            <EditText
+                android:id="@+id/example_word_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:minLines="4"
+                android:inputType="text|textAutoComplete|textMultiLine"
+                android:hint="@string/example_word_field" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+    </ScrollView>
 </RelativeLayout>
