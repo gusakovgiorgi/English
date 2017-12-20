@@ -69,8 +69,8 @@ public class AddToCardDialogFragment extends DialogFragment {
 
     private static final String BUILDER_TITLE = "BUILDER_TITLE";
     private static final String BUILDER_SAVE_BUTTON = "BUILDER_SAVE_BUTTON";
-    private static final String BUILDER_ORIGINAL_WORD="BUILDER_ORIGINAL_WORD";
-    private static final String BUILDER_TRANSCRIPTION_WORD="BUILDER_TRANSCRIPTION_WORD";
+    private static final String BUILDER_ORIGINAL_WORD = "BUILDER_ORIGINAL_WORD";
+    private static final String BUILDER_TRANSCRIPTION_WORD = "BUILDER_TRANSCRIPTION_WORD";
     private static final String BUILDER_TRANSLATION_WORD = "BUILDER_TRANSLATION_WORD";
     private static final String BUILDER_EXAMPLE_WORD = "BUILDER_EXAMPLE_WORD";
 
@@ -103,6 +103,10 @@ public class AddToCardDialogFragment extends DialogFragment {
     private String transcriptionWord;
     private String translationWord;
     private String exampleWord;
+    private TextView originalWordTv;
+    private TextView transcriptionWordTv;
+    private TextView translationWordTv;
+    private TextView exampleWordTv;
 
     private OnSaveListener onSaveListener;
     private OnDiscardListener onDiscardListener;
@@ -159,45 +163,50 @@ public class AddToCardDialogFragment extends DialogFragment {
 
     private void fillViews(ViewGroup view) {
 
-        TextView originalWordTv=view.findViewById(R.id.original_word_field);
-        TextView transcriptionWordTv=view.findViewById(R.id.transcription_word_field);
-        TextView translationWordTv=view.findViewById(R.id.translation_word_field);
-        TextView exampleWordTv=view.findViewById(R.id.example_word_field);
+        originalWordTv = view.findViewById(R.id.original_word_field);
+        transcriptionWordTv = view.findViewById(R.id.transcription_word_field);
+        translationWordTv = view.findViewById(R.id.translation_word_field);
+        exampleWordTv = view.findViewById(R.id.example_word_field);
 
-        TextInputLayout originalWordLayout=view.findViewById(R.id.original_word_layout);
-        TextInputLayout transcriptionWordLayout=view.findViewById(R.id.transcription_word_layout);
-        TextInputLayout translationWordLayout=view.findViewById(R.id.translation_word_layout);
-        TextInputLayout exampleLayout=view.findViewById(R.id.example_word_layout);
+        TextInputLayout originalWordLayout = view.findViewById(R.id.original_word_layout);
+        TextInputLayout transcriptionWordLayout = view.findViewById(R.id.transcription_word_layout);
+        TextInputLayout translationWordLayout = view.findViewById(R.id.translation_word_layout);
+        TextInputLayout exampleLayout = view.findViewById(R.id.example_word_layout);
 
         //disable animations if setted text is not empty
-        if (originalWord!=null){
+        if (originalWord != null) {
             originalWordLayout.setHintAnimationEnabled(false);
             originalWordTv.setText(originalWord);
             originalWordTv.setOnFocusChangeListener((v, hasFocus) -> {
-                if (hasFocus && !originalWordLayout.isHintAnimationEnabled())originalWordLayout.setHintAnimationEnabled(true);
+                if (hasFocus && !originalWordLayout.isHintAnimationEnabled())
+                    originalWordLayout.setHintAnimationEnabled(true);
             });
         }
-        if (transcriptionWord !=null){
+        if (transcriptionWord != null) {
             transcriptionWordLayout.setHintAnimationEnabled(false);
             transcriptionWordTv.setText(transcriptionWord);
             transcriptionWordTv.setOnFocusChangeListener((v, hasFocus) -> {
-                if (hasFocus && !transcriptionWordLayout.isHintAnimationEnabled())transcriptionWordLayout.setHintAnimationEnabled(true);
+                if (hasFocus && !transcriptionWordLayout.isHintAnimationEnabled())
+                    transcriptionWordLayout.setHintAnimationEnabled(true);
             });
         }
 
-        if (translationWord !=null){
+        if (translationWord != null) {
             translationWordLayout.setHintAnimationEnabled(false);
-            translationWordTv.setText(translationWord);;
+            translationWordTv.setText(translationWord);
+            ;
             translationWordTv.setOnFocusChangeListener((v, hasFocus) -> {
-                if (hasFocus && !translationWordLayout.isHintAnimationEnabled())translationWordLayout.setHintAnimationEnabled(true);
+                if (hasFocus && !translationWordLayout.isHintAnimationEnabled())
+                    translationWordLayout.setHintAnimationEnabled(true);
             });
         }
 
-        if (exampleWord !=null){
+        if (exampleWord != null) {
             exampleLayout.setHintAnimationEnabled(false);
             exampleWordTv.setText(exampleWord);
             exampleWordTv.setOnFocusChangeListener((v, hasFocus) -> {
-                if (hasFocus && !exampleLayout.isHintAnimationEnabled())exampleLayout.setHintAnimationEnabled(true);
+                if (hasFocus && !exampleLayout.isHintAnimationEnabled())
+                    exampleLayout.setHintAnimationEnabled(true);
             });
         }
     }
@@ -207,7 +216,7 @@ public class AddToCardDialogFragment extends DialogFragment {
         Toolbar toolbar = view.findViewById(R.id.toolbar);
 
         Drawable closeDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_close_24px);
-        Drawable doneDrawable =  ContextCompat.getDrawable(getContext(), R.drawable.ic_done_black_24px);
+        Drawable doneDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_done_black_24px);
 
         tintToolbarButton(toolbar, closeDrawable);
         tintToolbarButton(toolbar, doneDrawable);
@@ -226,12 +235,28 @@ public class AddToCardDialogFragment extends DialogFragment {
         itemConfirmButton.setOnMenuItemClickListener(
                 item -> {
                     if (item.getItemId() == itemConfirmButtonId) {
-                        confirm(null);
+                        if (requiredFieldsNotEmpty())
+                            confirm(null);
                         return true;
                     } else
                         return false;
                 });
+    }
 
+    private boolean requiredFieldsNotEmpty() {
+        boolean result = true;
+        if (translationWordTv.getText().toString().isEmpty()) {
+            result = false;
+            translationWordTv.setError(getString(R.string.required_field));
+            translationWordTv.requestFocus();
+        }
+        if (originalWordTv.getText().toString().isEmpty()) {
+            result = false;
+            originalWordTv.setError(getString(R.string.required_field));
+            originalWordTv.requestFocus();
+        }
+
+        return result;
     }
 
     // TODO: 12/14/2017 try without it
@@ -283,10 +308,10 @@ public class AddToCardDialogFragment extends DialogFragment {
         Bundle builderData = getArguments();
         title = builderData.getString(BUILDER_TITLE);
         saveButton = builderData.getString(BUILDER_SAVE_BUTTON);
-        originalWord=builderData.getString(BUILDER_ORIGINAL_WORD);
-        transcriptionWord =builderData.getString(BUILDER_TRANSCRIPTION_WORD);
-        translationWord =builderData.getString(BUILDER_TRANSLATION_WORD);
-        exampleWord =builderData.getString(BUILDER_EXAMPLE_WORD);
+        originalWord = builderData.getString(BUILDER_ORIGINAL_WORD);
+        transcriptionWord = builderData.getString(BUILDER_TRANSCRIPTION_WORD);
+        translationWord = builderData.getString(BUILDER_TRANSLATION_WORD);
+        exampleWord = builderData.getString(BUILDER_EXAMPLE_WORD);
     }
 
 
@@ -387,6 +412,7 @@ public class AddToCardDialogFragment extends DialogFragment {
 
         /**
          * set the transcriptionWord of translated word
+         *
          * @param transcription
          * @return This Builder object to allow for chaining of calls to set methods
          */
@@ -408,6 +434,7 @@ public class AddToCardDialogFragment extends DialogFragment {
 
         /**
          * set the exampleWord with original word
+         *
          * @param example
          * @return This Builder object to allow for chaining of calls to set methods
          */

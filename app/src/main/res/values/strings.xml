@@ -18,4 +18,5 @@
     <string name="transcription_word_field">Enter transcription</string>
     <string name="translation_word_field">Enter translation *</string>
     <string name="example_word_field">Enter example</string>
+    <string name="required_field">Required field</string>
 </resources>
